@@ -1,0 +1,19 @@
+{
+ "blogs":[
+{"title":"my first blog",
+  "body":"something is preoce dfdsfsdfsdafs aung augnaga augnagal tanua",
+ "author":"mario",
+"id": 1
+},
+{"title":"my second blog",
+ "body":"something is preoce dfdsfsdfsdafs aung augnaga augnagal tanua",
+"author":"super",
+"id": 2
+},
+{"title":"my third blog",
+ "body":"something is preoce dfdsfsdfsdafs aung augnaga augnagal tanua",
+"author":"aungkyaw",
+"id": 3
+}
+ ]
+}
