@@ -14,8 +14,9 @@ const useFetch = (url) => {
     console.log(res,'this is the data response')
     return res.json();
    }).then(data =>{
-    console.log(data.Search,'this is data')
-    setData(data.Search)
+     console.log(data.results,'this is tmdb data')
+    
+    setData(data.results)
     setIsLoading(false)
     setError(null)
    })

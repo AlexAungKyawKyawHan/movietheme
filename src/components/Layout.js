@@ -8,34 +8,38 @@ import { ListItemIcon } from "@material-ui/core";
 import { ListItemText } from "@material-ui/core";
 import { AppBar } from "@material-ui/core";
 import { Toolbar } from "@material-ui/core";
+import MenuIcon from '@material-ui/icons/Menu'
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from '@material-ui/icons/Delete';
 const drawerWidth = 240
 const useStyles = makeStyles({
  page:{
-  background:'#f9f9f9',
+  background:'#ffffff',
   width:'100%'
  },
- // drawer:{
- //  width:drawerWidth
- // },
- // drawerPaper:{
- //  width:drawerWidth
- // },
+//  drawer:{
+//   width:drawerWidth
+//  },
+//  drawerPaper:{
+//   width:drawerWidth
+//  },
  root:{
   display:'flex'
  },
- // appbar:{
- //  width:`calc(100% - ${drawerWidth}px)`
- // }
+//  appbar:{
+//   width:`calc(100% - ${drawerWidth}px)`
+//  }
 })
 
 const Layout = ({children}) => {
  const classes = useStyles()
  return (
   <div className={classes.root}>
-   <AppBar
-   className={classes.appbar}
-   >
+   <AppBar>
     <Toolbar>
+      <IconButton color="inherit">
+        <MenuIcon />
+      </IconButton>
      <Typography>
       MovieTHEME
      </Typography>

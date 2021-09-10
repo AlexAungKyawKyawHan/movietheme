@@ -6,13 +6,15 @@ import About from '../src/pages/About'
 import Layout from './components/Layout'
 import MovieDetails from './pages/MovieDetails';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+// import {Container} from '@material-ui/core'
 
 
 function App() {
   const title = 'welcome to the newworld'
   return (
+    // <Container>
     <Router>
-      <Layout>
+      {/* <Layout> */}
       <Navbar />
         <Switch>
           <Route exact path="/">
@@ -25,8 +27,9 @@ function App() {
           <MovieDetails />
           </Route>
         </Switch>
-      </Layout>
+      {/* </Layout> */}
     </Router>
+    // </Container>
   );
 }
 
