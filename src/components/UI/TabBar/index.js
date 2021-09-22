@@ -5,15 +5,12 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import shadows from '@material-ui/core/styles/shadows';
-
 
 interface TabPanelProps {
   children?: React.ReactNode;
   index: any;
   value: any;
 }
-
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
@@ -46,41 +43,37 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
     // backgroundColor: theme.palette.background.paper,
     boxShadow: 0,
-    border:0
-    
+    border: 0
+
   },
- tabcontainer:{
-   backgroundColor:'#ffffff',
-   
+  tabcontainer: {
+    backgroundColor: '#ffffff',
+
   },
-  tabtext:{
-   color:'#000000',
-  
+  tabtext: {
+    color: '#000000',
+
   },
-  tabpanel:{
-   color:'#000000',
-   
+  tabpanel: {
+    color: '#000000',
+
   },
-  label:{
-   boxShadow:'0'
-  }, 
-  
-  
+  label: {
+    boxShadow: '0'
+  },
 }));
 
-export default function TabBar({overview}) {
+export default function TabBar({ overview }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
-  
-
   return (
     <div className={classes.root}>
-      <AppBar classes={{label: classes.label}} className={classes.tabcontainer} position="static">
-        <Tabs classes={{label: classes.label}} className={classes.tabcontainer} value={value} onChange={handleChange} aria-label="simple tabs example">
+      <AppBar classes={{ label: classes.label }} className={classes.tabcontainer} position="static">
+        <Tabs classes={{ label: classes.label }} className={classes.tabcontainer} value={value} onChange={handleChange} aria-label="simple tabs example">
           <Tab className={classes.tabtext} label="Overview" {...a11yProps(0)} />
           <Tab className={classes.tabtext} label="You May Also Like" {...a11yProps(1)} />
         </Tabs>
@@ -91,7 +84,7 @@ export default function TabBar({overview}) {
       <TabPanel value={value} index={1}>
         Item Two
       </TabPanel>
-      
+
     </div>
   );
 }

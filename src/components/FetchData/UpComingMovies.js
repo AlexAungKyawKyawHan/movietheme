@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 
 
-const useUpComingMoviesFetch= (url) => {
+const FetchUpComingMovies= (url) => {
 
  const [dataUpComingMovies, setDataUpComingMovies] = useState([]);
  const [UpComingMoviesLoading, setUpComingMoviesLoading] = useState(true);
@@ -31,4 +31,4 @@ const useUpComingMoviesFetch= (url) => {
  },[url])
  return{dataUpComingMovies, UpComingMoviesLoading, UpComingMoviesError}
 }
-export default useUpComingMoviesFetch;
+export default FetchUpComingMovies;

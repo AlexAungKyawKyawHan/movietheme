@@ -1,7 +1,6 @@
 import { useState,useEffect } from "react";
 
-
-const useMovieDetailFetch = (url) => {
+const FetchMovieDetail = (url) => {
 
  const [dataMovieDetail, setDataMovieDetail] = useState([]);
  const [movieDetailLoading, setMovieDetailLoading] = useState(true);
@@ -31,4 +30,4 @@ const useMovieDetailFetch = (url) => {
  },[url])
  return{dataMovieDetail, movieDetailLoading, movieDetailError}
 }
-export default useMovieDetailFetch;
+export default FetchMovieDetail;

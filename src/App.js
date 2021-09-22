@@ -1,32 +1,48 @@
-import logo from './logo.svg';
 import './App.css';
-import Navbar from './Navbar'
+import Navbar from './components/UI/NavBar/index'
 import Home from '../src/pages/Home'
-import About from '../src/pages/About'
-import Layout from './components/Layout'
+import MoviePopular from './pages/MoviePopular'
 import MovieDetails from './pages/MovieDetails';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-// import {Container} from '@material-ui/core'
-
+import MoiveTopRated from './pages/MovieTopRated'
+import UpComingMovie from './pages/UpComingMovie/index';
+import PopularTVShows from './pages/PopularTVShows/index';
+import TopRatedTVShows from './pages/TopRatedTVShows/index';
+import OnAirTVShows from './pages/OnAirTVShows/index';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 function App() {
-  const title = 'welcome to the newworld'
   return (
     // <Container>
+    
     <Router>
       {/* <Layout> */}
       <Navbar />
-        <Switch>
-          <Route exact path="/">
+      <Switch>
+        <Route exact path="/">
           <Home />
-          </Route>
-          <Route path="/about">
-          <About />
-          </Route>
-          <Route path="/movies/:id">
+        </Route>
+        <Route path="/popularmovies">
+          <MoviePopular />
+        </Route>
+        <Route path="/topratedmoives">
+          <MoiveTopRated />
+        </Route>
+        <Route path="/upcomingmoives">
+          <UpComingMovie />
+        </Route>
+        <Route path="/populartvshows">
+          <PopularTVShows />
+        </Route>
+        <Route path="/topratedtvshows">
+          <TopRatedTVShows />
+        </Route>
+        <Route path="/onairtvshows">
+          <OnAirTVShows />
+        </Route>
+        <Route path="/movies/:id">
           <MovieDetails />
-          </Route>
-        </Switch>
+        </Route>
+      </Switch>
       {/* </Layout> */}
     </Router>
     // </Container>

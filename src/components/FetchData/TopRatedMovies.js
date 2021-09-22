@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 
 
-const useTopRatedMoviesFetch = (url) => {
+const FetchTopRatedMovies = (url) => {
 
  const [topRatedMoviesData, setTopRatedMoviesData] = useState([]);
  const [topRatedMovieLoading, setTopRatedMovieLoading] = useState(true);
@@ -31,4 +31,4 @@ const useTopRatedMoviesFetch = (url) => {
  },[url])
  return{topRatedMoviesData, topRatedMovieLoading, topRatedMovieError}
 }
-export default useTopRatedMoviesFetch
+export default FetchTopRatedMovies
