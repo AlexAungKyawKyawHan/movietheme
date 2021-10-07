@@ -8,56 +8,50 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import LinesEllipsis from 'react-lines-ellipsis'
-// import InfiniteLoading from '../components/FetchData/InfiniteLoading'
-import { useEffect, useState, useRef } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useEffect, useState } from 'react';
 
-const TOTAL_PAGES = 500;
 const MoviePopular = () => {
- const [loading, setLoading] = useState(true);
- const [allData, setAllData] = useState([]);
- const [pageNum, setPageNum] = useState(1);
- const [lastElement, setLastElement] = useState(null);
+ const [items, setItems] = useState([]);
+ const [noMore, setNoMore] = useState(true);
+ const [page, setPage] = useState(2)
 
- const observer = useRef(
-  new IntersectionObserver((entries) => {
-   const first = entries[0];
-   if (first.isIntersecting) {
-    setPageNum((no) => no + 1);
-   }
-  })
- );
 
- const callData = () => {
-   fetch(`https://api.themoviedb.org/3/movie/popular?api_key=80bddf828c664838885d3d70a11fb1af&language=en-US&page=${pageNum}`)
-   .then(res =>{
-    console.log(res)
-    return res.json();
-   }).then(data => {
-     let all = new Set([...allData,...data.results])
-     setAllData([...all])
-   })
+ useEffect(() => {
+  const getData = async () => {
+   const res = await fetch(
+    `https://api.themoviedb.org/3/movie/popular?api_key=80bddf828c664838885d3d70a11fb1af&language=en-US&page=1&limit=20`
+   );
+   const data = await res.json();
+   console.log(data, 'this is data')
+   setItems(data.results);
+   console.log(data.results)
+
+  }
+  getData();
+ }, []);
+
+ const fetchdats = async () => {
+  const res = await fetch(
+   `https://api.themoviedb.org/3/movie/popular?api_key=80bddf828c664838885d3d70a11fb1af&language=en-US&page=${page}&limit=20`
+  );
+  const data = await res.json();
+
+  return data.results
+
  }
- useEffect(() => {
-		if (pageNum <= TOTAL_PAGES) {
-			callData();
-		}
-	}, [pageNum]);
 
- useEffect(() => {
-		const currentElement = lastElement;
-		const currentObserver = observer.current;
+ const fetchData = async () => {
+  const server = await fetchdats();
 
-		if (currentElement) {
-			currentObserver.observe(currentElement);
-		}
+  setItems([...items, ...server])
+  if (server.length === 0 || server.length < 20){
+   setNoMore(false);
+  }
+  setPage(page + 1)
 
-		return () => {
-			if (currentElement) {
-				currentObserver.unobserve(currentElement);
-			}
-		};
-	}, [lastElement]);
- 
+ }
+
  const useStyles = makeStyles({
   cardWidth: {
    maxWidth: 130,
@@ -71,58 +65,68 @@ const MoviePopular = () => {
 
  });
  const classes = useStyles()
- // const { allData: popularmovies , pageNum: pageNumber } = InfiniteLoading(`https://api.themoviedb.org/3/movie/popular?api_key=80bddf828c664838885d3d70a11fb1af&language=en-US&page=${pageNumber}`)
+ 
  return (
   <div style={{ width: '100%' }}>
-   <Box
-    sx={{
-     display: 'flex',
-     flexDirection: 'column',
-     p: 1
-    }}
+   <InfiniteScroll
+    dataLength={items.length} //This is important field to render the next data
+    next={fetchData}
+    hasMore={noMore}
+    loader={<h4>Loading...</h4>}
+    endMessage={
+     <p style={{ textAlign: 'center' }}>
+      <b>Yay! You have seen it all</b>
+     </p>
+    }
    >
-    {allData.map((popularmovie) => (
-     <Link style={{ textDecoration: 'none' }} to={`/movies/${popularmovie.id}`}>
-      <Grid container key={popularmovie.poster_path}>
-       <Grid item xs={4}>
-        <Box sx={{
-         p: 0
-        }}>
-         <Card className={classes.cardWidth} >
-          <CardActionArea >
-           <CardMedia
-            component="img"
-            src={`https://image.tmdb.org/t/p/original${popularmovie.poster_path}`}
-           />
-          </CardActionArea>
+    <Box
+     sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      p: 1
+     }}
+    >
+     {items.map((popularmovie) => (
+      <Link style={{ textDecoration: 'none' }} to={`/movies/${popularmovie.id}`}>
+       <Grid container key={popularmovie.poster_path}>
+        <Grid item xs={4}>
+         <Box sx={{
+          p: 0
+         }}>
+          <Card className={classes.cardWidth} >
+           <CardActionArea >
+            <CardMedia
+             component="img"
+             src={`https://image.tmdb.org/t/p/original${popularmovie.poster_path}`}
+            />
+           </CardActionArea>
 
-         </Card>
-        </Box>
+          </Card>
+         </Box>
+        </Grid>
+        <Grid item xs={8}>
+         <Box sx={{
+          p: 1
+         }}>
+          <Typography variant="h6">
+           {popularmovie.original_title}
+          </Typography>
+          <LinesEllipsis
+           text={popularmovie.overview}
+           maxLine='3'
+           ellipsis='...'>
+          </LinesEllipsis>
+          <Typography variant="caption" >
+           {popularmovie.release_date}
+          </Typography>
+         </Box>
+        </Grid>
        </Grid>
-       <Grid item xs={8}>
-        <Box sx={{
-         p: 1
-        }}>
-         <Typography variant="h6">
-          {popularmovie.original_title}
-         </Typography>
-         <LinesEllipsis
-          text={popularmovie.overview}
-          maxLine='3'
-          ellipsis='...'>
-         </LinesEllipsis>
-         <Typography variant="caption" >
-          {popularmovie.release_date}
-         </Typography>
-        </Box>
-       </Grid>
-      </Grid>
-      <Divider className={classes.divider} />
-     </Link>
-    ))}
-
-   </Box>
-   {loading && <p className='text-center'>loading...</p>}
+       <Divider className={classes.divider} />
+      </Link>
+     ))}
+    </Box>
+   </InfiniteScroll>
 
   </div>
  )

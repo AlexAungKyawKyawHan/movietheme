@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
-import FetchMovieDetail from "../components/FetchData/MovieDetail";
+import FetchDetail from "../components/FetchData/Detail";
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TabBar from '../components/UI/TabBar/index'
 import Typography from '@material-ui/core/Typography';
+import Similar from '../components/FetchData/Similar'
 import LoadingSkeletonMoiveDetail from '../components/UI/LoadingMovieDetail/index'
 
 const MovieDetails = () => {
@@ -42,13 +43,14 @@ const MovieDetails = () => {
   });
   const classes = useStyles()
   const { id } = useParams()
-  const { dataMovieDetail: movie, movieDetailLoading } = FetchMovieDetail(`https://api.themoviedb.org/3/movie/${id}?api_key=80bddf828c664838885d3d70a11fb1af`)
+  const { detailData: movie, detailLoading } = FetchDetail(`https://api.themoviedb.org/3/movie/${id}?api_key=80bddf828c664838885d3d70a11fb1af`)
+  const {similarData: similarMovies} = Similar(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=80bddf828c664838885d3d70a11fb1af`)
   let movieruntime = Math.floor(movie.runtime / 60)
 
   return (
     <div>
-      {movieDetailLoading && <LoadingSkeletonMoiveDetail></LoadingSkeletonMoiveDetail>}
-      {movieDetailLoading === false && <Grid className={classes.root} container>
+      {detailLoading && <LoadingSkeletonMoiveDetail></LoadingSkeletonMoiveDetail>}
+      {detailLoading === false && <Grid className={classes.root} container>
         <Grid item xs={12}>
           <Card>
             <CardMedia
@@ -89,7 +91,7 @@ const MovieDetails = () => {
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <TabBar overview={movie.overview}></TabBar>
+          <TabBar overview={movie.overview} similarMovies={similarMovies}></TabBar>
         </Grid>
       </Grid>}
     </div>

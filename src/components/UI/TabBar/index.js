@@ -5,6 +5,12 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid'
+import Card from '@material-ui/core/Card'
+import CardMedia from '@material-ui/core/CardMedia'
+import { Link } from 'react-router-dom';
+import CardActionArea from '@material-ui/core/CardActionArea';
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -61,9 +67,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   label: {
     boxShadow: '0'
   },
+  cardWidth: {
+    maxWidth: 130,
+    height: 162
+
+  },
 }));
 
-export default function TabBar({ overview }) {
+export default function TabBar({ overview, similarMovies, similarTVShows }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -82,9 +93,44 @@ export default function TabBar({ overview }) {
         {overview}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
+        {(similarMovies) &&
+          <Grid container spacing={2}>
+            {similarMovies.map((similarMovie) =>
+              <Grid item xs={4}>
+                <Link style={{ textDecoration: 'none' }} to={`/movies/${similarMovie.id}`}>
+                  <Card className={classes.cardWidth}>
+                    <CardActionArea >
+                      <CardMedia
+                        component="img"
+                        src={`https://image.tmdb.org/t/p/original${similarMovie.poster_path}`}
+                      />
+                    </CardActionArea>
+                  </Card>
+                </Link>
+              </Grid>
+            )}
+          </Grid>
+        }
+        {(similarTVShows) &&
+          <Grid container spacing={2}>
+            {similarTVShows.map((similarTVShow) =>
+              <Grid item xs={4}>
+                <Link to={`/tvshow/${similarTVShow.id}`}>
+                  <Card className={classes.cardWidth}>
+                    <CardActionArea >
+                      <CardMedia
+                        component="img"
+                        src={`https://image.tmdb.org/t/p/original${similarTVShow.poster_path}`}
+                      />
+                    </CardActionArea>
+                  </Card>
+                </Link>
+              </Grid>
+            )}
+          </Grid>
+        }
 
+      </TabPanel>
     </div>
   );
 }

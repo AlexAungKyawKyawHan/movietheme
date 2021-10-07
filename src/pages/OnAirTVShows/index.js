@@ -8,25 +8,72 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import LinesEllipsis from 'react-lines-ellipsis';
-import FetchOnAirTVShows from '../../components/FetchData/FetchOnAirTVShows';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useEffect, useState } from 'react';
+
+const useStyles = makeStyles({
+ cardWidth: {
+  maxWidth: 130,
+  height: 162,
+  marginTop: 10
+
+ },
+ divider: {
+  marginTop: 10
+ },
+
+});
 
 const OnAirTVShows = () => {
- const useStyles = makeStyles({
-  cardWidth: {
-   maxWidth: 130,
-   height: 162,
-   marginTop: 10
-
-  },
-  divider: {
-   marginTop: 10
-  },
-
- });
+ const [onAirTVShows, setOnAirTVShows] = useState([]);
+ const [noMore, setNoMore] = useState(true);
+ const [page, setPage] = useState(2)
  const classes = useStyles()
- const { onAirTVShowsData: onairtvshows } = FetchOnAirTVShows('https://api.themoviedb.org/3/tv/on_the_air?api_key=80bddf828c664838885d3d70a11fb1af&language=en-US&page=1')
+
+ useEffect(() => {
+  const getData = async () => {
+   const res = await fetch(
+    `https://api.themoviedb.org/3/tv/on_the_air?api_key=80bddf828c664838885d3d70a11fb1af&language=en-US&page=1&limit=20`
+   );
+   const data = await res.json();
+   console.log(data, 'this is data')
+   setOnAirTVShows(data.results);
+   console.log(data.results)
+  }
+  getData();
+ }, []);
+
+ const callNextPage = async () => {
+  const res = await fetch(
+   `https://api.themoviedb.org/3/tv/on_the_air?api_key=80bddf828c664838885d3d70a11fb1af&language=en-US&page=${page}&limit=20`
+  );
+  const data = await res.json();
+  return data.results
+ }
+
+ const fetchData = async () => {
+  const nextOnAirTVShows = await callNextPage();
+  setOnAirTVShows([...onAirTVShows, ...nextOnAirTVShows])
+  if (nextOnAirTVShows.length === 0 || nextOnAirTVShows.length < 20) {
+   setNoMore(false);
+  }
+  setPage(page + 1)
+
+ }
+ // const { onAirTVShowsData: onairtvshows } = FetchOnAirTVShows('https://api.themoviedb.org/3/tv/on_the_air?api_key=80bddf828c664838885d3d70a11fb1af&language=en-US&page=1')
  return (
   <div>
+      <InfiniteScroll
+    dataLength={onAirTVShows.length}
+    next={fetchData}
+    hasMore={noMore}
+    loader={<h4>Loading...</h4>}
+    endMessage={
+     <p style={{ textAlign: 'center' }}>
+      <b>Yay! You have seen it all</b>
+     </p>
+    }
+   >
    <Box
     sx={{
      display: 'flex',
@@ -34,8 +81,8 @@ const OnAirTVShows = () => {
      p: 1
     }}
    >
-    {onairtvshows.map((onairtvshow) => (
-     <Link style={{ textDecoration: 'none' }} to={`/movies/${onairtvshow.id}`}>
+    {onAirTVShows.map((onairtvshow) => (
+     <Link style={{ textDecoration: 'none' }} to={`/tvshow/${onairtvshow.id}`}>
       <Grid container key={onairtvshow.poster_path}>
        <Grid item xs={4}>
         <Box sx={{
@@ -74,6 +121,7 @@ const OnAirTVShows = () => {
      </Link>
     ))}
    </Box>
+   </InfiniteScroll>
   </div>
  )
 }
